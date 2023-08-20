@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/bggstats/static/css/main.251e8698.css",
-    "main.js": "/bggstats/static/js/main.26e0b9db.js",
+    "main.js": "/bggstats/static/js/main.b8c775c3.js",
     "static/js/787.39b8f55f.chunk.js": "/bggstats/static/js/787.39b8f55f.chunk.js",
     "static/media/IBMPlexSerif-SemiBoldItalic-Cyrillic.woff": "/bggstats/static/media/IBMPlexSerif-SemiBoldItalic-Cyrillic.d96e5a614e96c351c453.woff",
     "static/media/IBMPlexSerif-SemiBoldItalic-Latin1.woff": "/bggstats/static/media/IBMPlexSerif-SemiBoldItalic-Latin1.b691d8c0c5110ea3659e.woff",
@@ -185,11 +185,11 @@
     "static/media/IBMPlexMono-Regular-Latin3.woff2": "/bggstats/static/media/IBMPlexMono-Regular-Latin3.cacfd1d7dbd14067b970.woff2",
     "index.html": "/bggstats/index.html",
     "main.251e8698.css.map": "/bggstats/static/css/main.251e8698.css.map",
-    "main.26e0b9db.js.map": "/bggstats/static/js/main.26e0b9db.js.map",
+    "main.b8c775c3.js.map": "/bggstats/static/js/main.b8c775c3.js.map",
     "787.39b8f55f.chunk.js.map": "/bggstats/static/js/787.39b8f55f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.251e8698.css",
-    "static/js/main.26e0b9db.js"
+    "static/js/main.b8c775c3.js"
   ]
 }
