@@ -14,26 +14,16 @@ const ByPlayer = (props) => {
 
   const generateTable = (plays) => {
     let toReturn = [];
-    const uniqueGames = {};
-    for (let i = 0; i < plays.length; i++) {
-      const play = plays[i];
-      const game = play.Game;
-
-      uniqueGames[game] = uniqueGames[game] ? uniqueGames[game] + 1 : 1;
-    }
     let uniqueGamesArray = plays.reduce((prev, curr) => {
       const exists = prev.find(g => g.Game === curr.Game);
       if (!exists) {
-        prev.push({...curr, plays: uniqueGames[curr.Game]});
+        prev.push({...curr, plays: 1});
+      } else {
+        exists.plays = exists.plays + 1;
       }
       return prev;
     }, [])
     
-    // Object.keys(uniqueGames).map((key) => ({
-    //   game: key,
-    //   gameId: 
-    //   plays: uniqueGames[key],
-    // }));
     uniqueGamesArray = uniqueGamesArray.sort((a, b) => {
       return b.plays - a.plays;
     });
@@ -56,7 +46,7 @@ const ByPlayer = (props) => {
       { key: "Percentage", header: "Percentage" },
     ];
     return (
-      <CustomDataTable  data={toReturn} headers={tableHeaders} title="By Game" sortable={true} /> 
+      <CustomDataTable data={toReturn} headers={tableHeaders} title="By Game" sortable={true} /> 
     );
   };
 
@@ -73,13 +63,13 @@ const ByPlayer = (props) => {
   }
   Object.keys(all).map((k) => {
     tabsHeaders.push(
-      <Tab>
+      <Tab key={k}>
         {k} player{parseInt(k) === 1 ? "" : "s"}
       </Tab>
     );
     const filteredPlays = plays.filter(p => parseInt(p.Players.length) === parseInt(k));
     tabsContents.push(
-      <TabPanel>
+      <TabPanel key={k}>
         {generateTable(filteredPlays)}
       </TabPanel>
     );
@@ -90,11 +80,11 @@ const ByPlayer = (props) => {
       <Column lg={16} md={8} sm={4}>
         <Tabs>
           <TabList aria-label="Navigation" contained fullWidth>
-            <Tab>All player counts</Tab>
+            <Tab key="all">All player counts</Tab>
             {tabsHeaders}
           </TabList>
           <TabPanels>
-            <TabPanel>{generateTable(plays)}</TabPanel>
+            <TabPanel key="all">{generateTable(plays)}</TabPanel>
             {tabsContents}
           </TabPanels>
         </Tabs>

@@ -14,7 +14,7 @@ const {
 const CustomDataTable = (props) => {
   const { data, headers, title, sortable } = props;
   return (
-    <DataTable rows={data} headers={headers} isSortable={sortable}>
+    <DataTable rows={data.map(d => ({...d, id: `${d.id}`}))} headers={headers} isSortable={sortable}>
       {({ rows, headers, getHeaderProps, getTableProps }) => (
         <TableContainer title={title}>
           <Table {...getTableProps()} useZebraStyles>
