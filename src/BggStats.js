@@ -14,7 +14,7 @@ import {
   DatePicker,
   DatePickerInput,
 } from "@carbon/react";
-import { Corn, Home, Monster } from "@carbon/icons-react";
+import { EventsAlt, GameConsole, Monster, Person } from "@carbon/icons-react";
 import moment from "moment";
 import ByPlayer from "./ByPlayer";
 import ByGame from "./ByGame";
@@ -160,9 +160,9 @@ const BggStats = () => {
           <Tabs>
             <TabList aria-label="Navigation" contained fullWidth>
               <Tab renderIcon={Monster}>Basic Info</Tab>
-              <Tab renderIcon={Corn}>By Player Count</Tab>
-              <Tab renderIcon={Home}>By Player</Tab>
-              <Tab renderIcon={Home}>By Game</Tab>
+              <Tab renderIcon={EventsAlt}>By Player Count</Tab>
+              <Tab renderIcon={Person}>By Player</Tab>
+              <Tab renderIcon={GameConsole}>By Game</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
