@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import XMLParser from "react-xml-parser";
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import he from "he";
 import {
   Grid,
@@ -13,12 +14,16 @@ import {
   TabsSkeleton,
   DatePicker,
   DatePickerInput,
+  SkeletonText,
 } from "@carbon/react";
-import { EventsAlt, GameConsole, Monster, Person } from "@carbon/icons-react";
+import { CharacterWholeNumber, EventsAlt, GameConsole, Monster, Person } from "@carbon/icons-react";
 import moment from "moment";
 import ByPlayer from "./ByPlayer";
 import ByGame from "./ByGame";
 import ByPlayerCount from "./ByPlayerCount";
+import ByNumberOfPlays from "./ByNumberOfPlays";
+
+axiosRetry(axios, { retries: 20, retryDelay: 3000 });
 
 const BggStats = () => {
   let params = new URL(document.location).searchParams;
@@ -28,7 +33,13 @@ const BggStats = () => {
   }
 
   const [bggData, setBggData] = useState({});
+  const [ownedGamesPlayed, setOwnedGamesPlayed] = useState(0);
+  const [ownedGamesNotPlayed, setOwnedGamesNotPlayed] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingOwnedGamesPlayed, setIsLoadingOwnedGamesPlayed] =
+    useState(true);
+  const [isLoadingOwnedGamesNotPlayed, setIsLoadingOwnedGamesNotPlayed] =
+    useState(true);
   const [date, setDate] = useState({
     mindate: moment().startOf("year").format("YYYY-MM-DD"),
     maxdate: moment().format("YYYY-MM-DD"),
@@ -63,7 +74,7 @@ const BggStats = () => {
   };
 
   const getData = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const username = user;
     const response = await axios.get(
       `https://api.geekdo.com/xmlapi2/plays?username=${username}&page=1&mindate=${date.mindate}&maxdate=${date.maxdate}`
@@ -86,9 +97,42 @@ const BggStats = () => {
 
     parsedData.plays = parsePlays(parsedData.children);
     setBggData(parsedData);
-    setIsLoading(false)
-    return parsedData;
+    setIsLoading(false);
   };
+
+  // const getOwnedGamesPlayed = async () => {
+  //   setIsLoadingOwnedGamesPlayed(true);
+  //   const username = user;
+  //   const response = await axios.get(
+  //     `https://api.geekdo.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1&played=1&excludesubtype=boardgameexpansion`
+  //   );
+  //   const parsedData = new XMLParser().parseFromString(response.data);
+  //   let result = 0;
+  //   if (parsedData) {
+  //     result = parsedData.attributes.totalitems;
+  //   }
+  //   setOwnedGamesPlayed(parseInt(result));
+  //   setIsLoadingOwnedGamesPlayed(false);
+  // };
+  // const getOwnedGamesNotPlayed = async () => {
+  //   setIsLoadingOwnedGamesNotPlayed(true);
+  //   const username = user;
+  //   const response = await axios.get(
+  //     `https://api.geekdo.com/xmlapi2/collection?username=${username}&subtype=boardgame&own=1&played=0&excludesubtype=boardgameexpansion`
+  //   );
+  //   const parsedData = new XMLParser().parseFromString(response.data);
+  //   let result = 0;
+  //   if (parsedData) {
+  //     result = parsedData.attributes.totalitems;
+  //   }
+  //   setOwnedGamesNotPlayed(parseInt(result));
+  //   setIsLoadingOwnedGamesNotPlayed(false);
+  // };
+
+  // useEffect(() => {
+  //   getOwnedGamesPlayed();
+  //   getOwnedGamesNotPlayed();
+  // }, []);
 
   useEffect(() => {
     getData();
@@ -156,13 +200,14 @@ const BggStats = () => {
           />
         </DatePicker>
         <br />
-        { !isLoading ? (
+        {!isLoading ? (
           <Tabs>
             <TabList aria-label="Navigation" contained fullWidth>
               <Tab renderIcon={Monster}>Basic Info</Tab>
               <Tab renderIcon={EventsAlt}>By Player Count</Tab>
               <Tab renderIcon={Person}>By Player</Tab>
               <Tab renderIcon={GameConsole}>By Game</Tab>
+              <Tab renderIcon={CharacterWholeNumber}>By Number of plays</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -179,6 +224,26 @@ const BggStats = () => {
                   }
                 </p>
                 <p>H-index: {calculateHIndex(bggData.plays || [])}</p>
+                {/* {isLoadingOwnedGamesPlayed && ownedGamesPlayed && ownedGamesNotPlayed ? (
+                  <SkeletonText />
+                ) : (
+                  <p>
+                    Owned games played: {ownedGamesPlayed} (
+                    {Math.ceil((ownedGamesPlayed * 100) /
+                      (ownedGamesPlayed + ownedGamesNotPlayed))}
+                    %)
+                  </p>
+                )}
+                {isLoadingOwnedGamesNotPlayed && ownedGamesPlayed && ownedGamesNotPlayed ? (
+                  <SkeletonText />
+                ) : (
+                  <p>
+                    Owned games not played: {ownedGamesNotPlayed} (
+                    {Math.floor((ownedGamesNotPlayed * 100) /
+                      (ownedGamesPlayed + ownedGamesNotPlayed))}
+                    %)
+                  </p>
+                )} */}
               </TabPanel>
               <TabPanel>
                 <ByPlayerCount user={user} plays={bggData.plays || []} />
@@ -188,6 +253,9 @@ const BggStats = () => {
               </TabPanel>
               <TabPanel>
                 <ByGame plays={bggData.plays || []} />
+              </TabPanel>
+              <TabPanel>
+                <ByNumberOfPlays plays={bggData.plays || []} />
               </TabPanel>
             </TabPanels>
           </Tabs>

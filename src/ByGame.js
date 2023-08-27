@@ -9,7 +9,7 @@ import {
 } from "@carbon/react";
 import CustomDataTable from "./CustomDataTable";
 
-const ByPlayer = (props) => {
+const ByGame = (props) => {
   const plays = props.plays;
 
   const generateTable = (plays) => {
@@ -93,4 +93,4 @@ const ByPlayer = (props) => {
   );
 };
 
-export default ByPlayer;
+export default ByGame;
